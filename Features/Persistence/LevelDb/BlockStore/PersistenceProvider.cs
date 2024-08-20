@@ -1,0 +1,19 @@
+﻿using XOuranos.Features.BlockStore.Pruning;
+using XOuranos.Features.BlockStore.Repository;
+using XOuranos.Persistence;
+using XOuranos.Persistence.LevelDb;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace XOuranos.Features.BlockStore.Persistence.LevelDb
+{
+    public class PersistenceProvider : PersistenceProviderBase<BlockStoreFeature>
+    {
+        public override string Tag => LevelDbPersistence.Name;
+
+        public override void AddRequiredServices(IServiceCollection services)
+        {
+            services.AddSingleton<IBlockRepository, LevelDbBlockRepository>();
+            services.AddSingleton<IPrunedBlockRepository, LevelDbPrunedBlockRepository>();
+        }
+    }
+}
