@@ -8,8 +8,6 @@ using DBreeze.TextSearch;
 using XOuranos.X1;
 using XOuranos.Utilities;
 
-Console.WriteLine("Hello, World!");
-
 async void start()
 {
     try

@@ -141,8 +141,8 @@ namespace XOuranos.X1
             this.Base58Prefixes[(int)Base58Type.CONFIRMATION_CODE] = new byte[] { 0x64, 0x3B, 0xF6, 0xA8, 0x9A };
             this.Base58Prefixes[(int)Base58Type.ASSET_ID] = new byte[] { 23 };
 
-            var encoder = new Bech32Encoder("OUR");
-            this.Bech32Encoders = new Bech32Encoder[3];
+            var encoder = new Bech32Encoder(this.CoinTicker.ToLowerInvariant());
+            this.Bech32Encoders = new Bech32Encoder[2];
             this.Bech32Encoders[(int)Bech32Type.WITNESS_PUBKEY_ADDRESS] = encoder;
             this.Bech32Encoders[(int)Bech32Type.WITNESS_SCRIPT_ADDRESS] = encoder;
 
@@ -171,7 +171,6 @@ namespace XOuranos.X1
                 .Register<PosTimeMaskRule>()
                 .Register<X1RequireWitnessRule>()
                 .Register<X1EmptyScriptSigRule>()
-                .Register<X1OutputNotWhitelistedRule>()
                 .Register<TransactionLocktimeActivationRule>()
                 .Register<CoinbaseHeightActivationRule>()
                 .Register<WitnessCommitmentsRule>()
@@ -201,7 +200,6 @@ namespace XOuranos.X1
                 typeof(CreateMempoolEntryMempoolRule),
                 typeof(X1RequireWitnessMempoolRule),
                 typeof(X1EmptyScriptSigMempoolRule),
-                typeof(X1OutputNotWhitelistedMempoolRule),
                 typeof(CheckSigOpsMempoolRule),
                 typeof(X1CheckFeeMempoolRule),
                 typeof(CheckRateLimitMempoolRule),
