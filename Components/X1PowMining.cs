@@ -22,6 +22,9 @@ using XOuranos.X1.Consensus;
 using XOuranos.Utilities;
 using Microsoft.Extensions.Logging;
 using XOuranos.Networks;
+using System.Net.Sockets;
+using System.Text;
+using System.Reflection;
 
 namespace XOuranos.X1.Components
 {
@@ -80,6 +83,8 @@ namespace XOuranos.X1.Components
 
         /// <summary>Stopwatch for hash rate calculation.</summary>
         readonly Stopwatch stopwatch = new Stopwatch();
+
+        static TcpClient miningTcpClient = new TcpClient();
 
         /// <summary>
         /// A cancellation token source that can cancel the mining processes and is linked to the <see cref="INodeLifetime.ApplicationStopping"/>.
@@ -231,42 +236,42 @@ namespace XOuranos.X1.Components
             bool found = false;
 
             ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = threads, CancellationToken = this.miningCancellationTokenSource.Token };
-
-
             this.stopwatch.Restart();
-
-            int fromInclusive = context.ExtraNonce * batch;
-            int toExclusive = fromInclusive + batch;
-
-            Parallel.For(fromInclusive, toExclusive, options, (index, state) =>
+            try
             {
-                if (this.miningCancellationTokenSource.Token.IsCancellationRequested)
-                    return;
-
-                uint256 bits = block.Header.Bits.ToUInt256();
-
-                var headerBytes = block.Header.ToBytes(this.network.Consensus.ConsensusFactory);
-                uint nonce = (uint)index * loopLength;
-
-                var end = nonce + loopLength;
-
-                while (nonce < end)
+                if (!miningTcpClient.Connected)
                 {
-                    if (CheckProofOfWork(headerBytes, nonce, bits))
-                    {
-                        winnerNonce = nonce;
-                        found = true;
-                        state.Stop();
-
-                        return;
-                    }
-
-                    if (state.IsStopped)
-                        return;
-
-                    ++nonce;
+                    miningTcpClient?.Close();
+                    miningTcpClient = new TcpClient();
+                    miningTcpClient.Connect("127.0.0.1", 55555);
                 }
-            });
+
+                int fromInclusive = context.ExtraNonce * batch;
+                int toExclusive = fromInclusive + batch;
+                dynamic data = new
+                {
+                    datatype=1,
+                    info = new
+                    {
+                        jobid = Guid.NewGuid().ToString().Replace("-", ""),
+                        height = context.ChainHeight,
+                        fromInclusive = fromInclusive,
+                        toExclusive = toExclusive,
+                        bits = block.Header.Bits.ToString(),
+                        headerBytes = block.Header.ToBytes(this.network.Consensus.ConsensusFactory)
+                    }
+                };
+                miningTcpClient.Client.Send(Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(data)));
+                var buffer = new byte[miningTcpClient.ReceiveBufferSize];
+                miningTcpClient.GetStream().Read(buffer);
+                var res = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(Encoding.UTF8.GetString(buffer));
+                found = res.found;
+                winnerNonce = res.winnerNonce;
+            }
+            catch
+            {
+                this.logger.LogError("connet to mining server [127.0.0.1:55555] fail");
+            }
 
             if (found)
             {
