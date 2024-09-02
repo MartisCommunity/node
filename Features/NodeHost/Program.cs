@@ -119,8 +119,9 @@ namespace XOuranos.Features.NodeHost
             options.FileProvider = options.FileProvider ?? this.environment.WebRootFileProvider;
 
             // Add our provider
-            var filesProvider = new ManifestEmbeddedFileProvider(GetType().Assembly, "UI/wwwroot");
-            options.FileProvider = new CompositeFileProvider(options.FileProvider, filesProvider);
+            //var ass = GetType().Assembly;
+            //var filesProvider = new ManifestEmbeddedFileProvider(ass, "UI/wwwroot");
+            //options.FileProvider = new CompositeFileProvider(options.FileProvider);
         }
     }
 }

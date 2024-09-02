@@ -104,7 +104,7 @@ namespace XOuranos.Features.NodeHost
             }
 
             this.EnableWS = config.GetOrDefault<bool>("enableWS", false, this.logger);
-            this.EnableUI = config.GetOrDefault<bool>("enableUI", true, this.logger);
+            this.EnableUI = config.GetOrDefault<bool>("enableUI", false, this.logger);
             this.EnableAPI = config.GetOrDefault<bool>("enableAPI", true, this.logger);
             this.EnableAuth = config.GetOrDefault<bool>("enableAuth", false, this.logger);
         }

@@ -162,7 +162,7 @@ namespace XOuranos.Features.Wallet.Api.Controllers
 
         [ActionName("sendtoaddress")]
         [ActionDescription("Sends money to an address. Requires wallet to be unlocked using walletpassphrase.")]
-        public async Task<uint256> SendToAddressAsync(BitcoinAddress address, decimal amount, string commentTx, string commentDest, decimal? fee = null)
+        public async Task<uint256> SendToAddressAsync(BitcoinAddress address,string password, decimal amount, string commentTx, string commentDest, decimal? fee = null)
         {
             decimal transactionFee = fee ?? Money.Satoshis(this.FullNode.Network.MinTxFee).ToDecimal(MoneyUnit.BTC);
 
@@ -171,6 +171,7 @@ namespace XOuranos.Features.Wallet.Api.Controllers
                 AccountReference = this.GetWalletAccountReference(),
                 Recipients = new[] { new Recipient { Amount = Money.Coins(amount), ScriptPubKey = address.ScriptPubKey } }.ToList(),
                 CacheSecret = false,
+                WalletPassword=password,
                 TransactionFee = Money.Coins(transactionFee),
             };
 

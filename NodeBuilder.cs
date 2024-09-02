@@ -40,7 +40,7 @@ namespace XOuranos
             .UseMempool()
             .UseBlockNotification()
             .UseTransactionNotification()
-            //.UseNodeHost()
+            .UseNodeHost()
             .AddRPC()
             .UseDiagnosticFeature();
 
