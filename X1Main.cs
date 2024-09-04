@@ -52,7 +52,7 @@ namespace XOuranos.X1
             this.MaxTxFee = Money.Coins(1).Satoshi;
             this.FallbackFee = Money.Coins(0.00001m).Satoshi;
             this.MinRelayTxFee = Money.Coins(0.00001m).Satoshi;
-            this.AbsoluteMinTxFee = Money.Coins(0.01m).Satoshi;
+            this.AbsoluteMinTxFee = Money.Coins(0.00001m).Satoshi;
 
             var consensusFactory = new X1ConsensusFactory();
             this.GenesisTime = Utils.DateTimeToUnixTime(new DateTime(2020, 1, 2, 23, 56, 00, DateTimeKind.Utc));

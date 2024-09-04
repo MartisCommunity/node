@@ -27,10 +27,10 @@ namespace XOuranos.X1.Rules
             Debug.Assert(((X1Main)this.network).AbsoluteMinTxFee.HasValue);
 
             long consensusRejectFee = ((X1Main)this.network).AbsoluteMinTxFee.Value;
-            if (context.Fees < consensusRejectFee)
+            if (context.Fees.Satoshi < consensusRejectFee)
             {
                 this.logger.LogTrace("(-)[FAIL_ABSOLUTE_MIN_TX_FEE_NOT_MET]");
-                context.State.Fail(MempoolErrors.MinFeeNotMet, $" {context.Fees} < {consensusRejectFee}").Throw();
+                context.State.Fail(MempoolErrors.MinFeeNotMet, $" {context.Fees.Satoshi} < {consensusRejectFee}").Throw();
             }
 
             // calling the base class here allows for customized behavior above the AbsoluteMinTxFee threshold.
