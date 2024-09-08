@@ -498,7 +498,7 @@ namespace XOuranos.X1.Components
             Buffer.BlockCopy(heightScriptBytes, 0, scriptSigBytes, 0, heightScriptBytes.Length);
             Buffer.BlockCopy(extraNonceScriptBytes, 0, scriptSigBytes, heightScriptBytes.Length, extraNonceScriptBytes.Length);
 
-            block.Transactions[0].Inputs[0].ScriptSig = new Script(scriptSigBytes);
+            block.Transactions[0].Inputs[0].ScriptSig = new Script(scriptSigBytes) + OpcodeType.OP_0;
 
             this.blockProvider.BlockModified(previousHeader, block);
 
