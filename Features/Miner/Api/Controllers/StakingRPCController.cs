@@ -8,6 +8,7 @@ using XOuranos.NBitcoin;
 using XOuranos.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using XOuranos.X1.Components;
 
 namespace XOuranos.Features.Miner.Api.Controllers
 {
@@ -55,7 +56,7 @@ namespace XOuranos.Features.Miner.Api.Controllers
         [ActionDescription("Stops staking.")]
         public bool StopStaking()
         {
-            this.fullNode.NodeFeature<MiningFeature>(true).StopStaking();
+            this.fullNode.NodeFeature<X1MiningFeature>(true).StopStaking();
             return true;
         }
 
@@ -84,7 +85,7 @@ namespace XOuranos.Features.Miner.Api.Controllers
                 throw new SecurityException(ex.Message);
             }
 
-            this.fullNode.NodeFeature<MiningFeature>(true).StartStaking(walletName, walletPassword);
+            this.fullNode.NodeFeature<X1MiningFeature>(true).StartStaking(walletName, walletPassword);
 
             return true;
         }

@@ -13,7 +13,7 @@ using XOuranos.Features.MemoryPool;
 using XOuranos.Features.Miner;
 using XOuranos.Features.Miner.Broadcasters;
 using XOuranos.Features.Miner.Interfaces;
-using XOuranos.Features.Miner.UI;
+//using XOuranos.Features.Miner.UI;
 using XOuranos.Features.RPC;
 using XOuranos.Interfaces;
 using XOuranos.Interfaces.UI;
@@ -87,7 +87,7 @@ namespace XOuranos.X1.Components
                         services.AddSingleton<BlockDefinition, PowBlockDefinition>();
                         services.AddSingleton<BlockDefinition, PosBlockDefinition>();
                         services.AddSingleton<BlockDefinition, PosPowBlockDefinition>();
-                        services.AddSingleton<INavigationItem, StakeNavigationItem>();
+                        //services.AddSingleton<INavigationItem, StakeNavigationItem>();
                         services.AddSingleton<IClientEventBroadcaster, StakingBroadcaster>();
                     });
             });

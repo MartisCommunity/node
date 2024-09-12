@@ -16,6 +16,7 @@ using XOuranos.Utilities.JsonErrors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using XOuranos.X1.Components;
 
 namespace XOuranos.Features.Miner.Api.Controllers
 {
@@ -141,7 +142,7 @@ namespace XOuranos.Features.Miner.Api.Controllers
                     throw new SecurityException(ex.Message);
                 }
 
-                this.fullNode.NodeFeature<MiningFeature>(true).StartStaking(request.Name, request.Password);
+                this.fullNode.NodeFeature<X1MiningFeature>(true).StartStaking(request.Name, request.Password);
 
                 return this.Ok();
             }
@@ -169,7 +170,7 @@ namespace XOuranos.Features.Miner.Api.Controllers
                 if (!this.fullNode.Network.Consensus.IsProofOfStake)
                     return ErrorHelpers.BuildErrorResponse(HttpStatusCode.MethodNotAllowed, "Method not allowed", "Method only available for Proof of Stake");
 
-                this.fullNode.NodeFeature<MiningFeature>(true).StopStaking();
+                this.fullNode.NodeFeature<X1MiningFeature>(true).StopStaking();
                 return this.Ok();
             }
             catch (Exception e)
