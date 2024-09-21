@@ -27,6 +27,7 @@ using XOuranos.Utilities;
 using XOuranos.Utilities.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace XOuranos.Features.RPC.Controllers
 {
@@ -515,6 +516,20 @@ namespace XOuranos.Features.RPC.Controllers
 
             // TODO: Implement blockchainInfo.warnings
             return blockchainInfo;
+        }
+
+        [ActionName("getindexinfo")]
+        [ActionDescription("Returns the status of one or all available indices currently running in the node.")]
+        public object GetIndexInfo()
+        {
+            return new
+            {
+                name = new
+                {
+                    synced = this.ibdState?.IsInitialBlockDownload() ?? true,      // (boolean)Whether the index is synced or not
+                    best_block_height = (uint)(this.ChainIndexer?.Height ?? 0) //The block height to which the index is synced
+                },
+            };
         }
 
         private SoftForksBip9 CreateSoftForksBip9(ThresholdStateModel metric, ThresholdState state)
