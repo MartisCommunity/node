@@ -14,7 +14,6 @@ async void start()
     {
         NodeSettings nodeSettings = new NodeSettings(networksSelector: Networks.X1);
         IFullNodeBuilder nodeBuilder = NodeBuilder.Create(nodeSettings);
-
         IFullNode node = nodeBuilder.Build();
 
         if (node != null)

@@ -108,7 +108,7 @@ namespace XOuranos.Features.NodeHost
                 services.Configure<RazorPagesOptions>(options =>
                 {
                     // The UI elements moved under the UI folder
-                    options.RootDirectory = "/UI/Pages";
+                    options.RootDirectory = "/Features/NodeHost/UI/Pages";
                 });
 
                 services.AddBlazorModal();
