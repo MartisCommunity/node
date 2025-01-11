@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+<TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyTitle>Martiscoin.Node</AssemblyTitle>
+    <AssemblyName>Martiscoin.Node</AssemblyName>
+    <PackageId>Martiscoin.Node</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <ApplicationIcon>martiscoin.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="martiscoin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Martiscoin.core.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.BlockStore\Martiscoin.Features.BlockStore.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.ColdStaking\Martiscoin.Features.ColdStaking.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.Diagnostic\Martiscoin.Features.Diagnostic.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.Dns\Martiscoin.Features.Dns.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.Miner\Martiscoin.Features.Miner.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.NodeHost\Martiscoin.Features.NodeHost.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.Notifications\Martiscoin.Features.Notifications.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.RPC\Martiscoin.Features.RPC.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.WalletWatchOnly\Martiscoin.Features.WalletWatchOnly.csproj" />
+    <ProjectReference Include="..\Features\Martiscoin.Features.Wallet\Martiscoin.Features.Wallet.csproj" />
+    <ProjectReference Include="..\Features\Persistence\Martiscoin.Features.Persistence.LevelDb.CorePackage\Martiscoin.Features.Persistence.LevelDb.CorePackage.csproj" />
+    <ProjectReference Include="..\Features\Persistence\Martiscoin.Features.Persistence.Rocksdb.CorePackage\Martiscoin.Features.Persistence.Rocksdb.CorePackage.csproj" />
+    <ProjectReference Include="..\Martiscoin.Networks.X1\Martiscoin.Networks.X1.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+  </ItemGroup>
+</Project>

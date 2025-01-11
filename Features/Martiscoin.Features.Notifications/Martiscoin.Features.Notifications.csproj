@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+<TargetFramework>net8.0</TargetFramework>
+    <Description>Martiscoin Features Notifications</Description>
+    <AssemblyTitle>Martiscoin.Features.Notifications</AssemblyTitle>
+    <AssemblyName>Martiscoin.Features.Notifications</AssemblyName>
+    <PackageId>Martiscoin.Features.Notifications</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+	  <ProjectReference Include="..\..\..\core\Martiscoin.core.csproj" />
+	  <ProjectReference Include="..\Martiscoin.Features.NodeHost\Martiscoin.Features.NodeHost.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;IDE0008;</NoWarn>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+</Project>

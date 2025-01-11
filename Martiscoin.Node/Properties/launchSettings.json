@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MSC (MAIN)": {
+      "commandName": "Project",
+      "commandLineArgs": "--chain=MSC"
+    }
+  }
+}

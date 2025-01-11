@@ -1,0 +1,89 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Mars\\node\\Features\\Marscore.Features.Consensus\\Marscore.Features.Consensus.csproj": {}
+  },
+  "projects": {
+    "D:\\Mars\\node\\Features\\Marscore.Features.Consensus\\Marscore.Features.Consensus.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Mars\\node\\Features\\Marscore.Features.Consensus\\Marscore.Features.Consensus.csproj",
+        "projectName": "Martiscoin.Features.Consensus",
+        "projectPath": "D:\\Mars\\node\\Features\\Marscore.Features.Consensus\\Marscore.Features.Consensus.csproj",
+        "packagesPath": "C:\\Users\\ainan\\.nuget\\packages\\",
+        "outputPath": "D:\\Mars\\node\\Features\\Marscore.Features.Consensus\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ainan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://www.nuget.org/api/v2/": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\Mars\\core\\Martiscoin.csproj": {
+                "projectPath": "D:\\Mars\\core\\Martiscoin.csproj"
+              },
+              "D:\\Mars\\node\\Features\\Martiscoin.Features.NodeHost\\Martiscoin.Features.NodeHost.csproj": {
+                "projectPath": "D:\\Mars\\node\\Features\\Martiscoin.Features.NodeHost\\Martiscoin.Features.NodeHost.csproj"
+              },
+              "D:\\Mars\\node\\Martiscoin\\Martiscoin.csproj": {
+                "projectPath": "D:\\Mars\\node\\Martiscoin\\Martiscoin.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "LevelDB.Standard": {
+              "target": "Package",
+              "version": "[2.1.6.1, )"
+            },
+            "Microsoft.FASTER": {
+              "target": "Package",
+              "version": "[2020.2.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

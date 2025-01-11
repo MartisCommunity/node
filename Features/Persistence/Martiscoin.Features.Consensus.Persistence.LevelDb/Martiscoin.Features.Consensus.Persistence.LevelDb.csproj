@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+<TargetFramework>net8.0</TargetFramework>
+    <Description>LevelDb persistence for Martiscoin Consensus feature</Description>
+    <AssemblyTitle>Martiscoin.Features.Consensus.Persistence.LevelDb</AssemblyTitle>
+    <AssemblyName>Martiscoin.Features.Consensus.Persistence.LevelDb</AssemblyName>
+    <PackageId>Martiscoin.Features.Consensus.Persistence.LevelDb</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Authors>Martiscoin</Authors>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\core\Martiscoin.core.csproj" />
+    <ProjectReference Include="..\..\Martiscoin.Features.Consensus\Martiscoin.Features.Consensus.csproj" />
+    <ProjectReference Include="..\Martiscoin.Persistence.LevelDb\Martiscoin.Persistence.LevelDb.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;IDE0008;</NoWarn>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+</Project>
