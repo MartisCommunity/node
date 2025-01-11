@@ -36,3 +36,6 @@
 /Features/Persistence/Martiscoin.Features.Persistence.Rocksdb.CorePackage
 /Features/Persistence/Martiscoin.Persistence.LevelDb
 /Features/Persistence/Martiscoin.Persistence.RocksDb
+/Features/Martiscoin.Features.Consensus/obj/Debug/net8.0
+/Features/Martiscoin.Features.ColdStaking/bin/Debug/net8.0
+/Features/Martiscoin.Features.Consensus/obj

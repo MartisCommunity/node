@@ -152,7 +152,18 @@ namespace Martiscoin.Networks.X1
 
             this.Checkpoints = new Dictionary<int, CheckpointInfo>();
             this.DNSSeeds = new List<DNSSeedData>();
-
+            this.DNSSeeds.Add(new DNSSeedData("node1.martiscoin.org", "node1.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node2.martiscoin.org", "node2.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node3.martiscoin.org", "node3.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node4.martiscoin.org", "node4.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node5.martiscoin.org", "node5.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node6.martiscoin.org", "node6.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node7.martiscoin.org", "node7.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node8.martiscoin.org", "node8.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node9.martiscoin.org", "node9.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node10.martiscoin.org", "node10.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node11.martiscoin.org", "node11.martiscoin.org"));
+            this.DNSSeeds.Add(new DNSSeedData("node12.martiscoin.org", "node12.martiscoin.org"));
             this.SeedNodes = new List<NetworkAddress>();
 
             RegisterRules(this.Consensus);
