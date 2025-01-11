@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Marscore.Features.ColdStaking.props" />
-</Project>
