@@ -2,7 +2,6 @@
 label: "Welcome"
 icon: home
 ---
-![](/static/banner.png)
 
 # Welcome to Martiscoin
 
