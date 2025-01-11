@@ -31,15 +31,19 @@ namespace Martiscoin.Node
 
                 if (node != null)
                 {
-                    var find = args.Where(a => { return a.Equals("openbrowser=false"); });
-                    if (find.Count() <= 0)
+                    try
                     {
-                        new Thread(delegate ()
+                        var find = args.Where(a => { return a.Equals("openbrowser=false"); });
+                        if (find.Count() <= 0)
                         {
-                            System.Threading.Thread.Sleep(1000 * 3);
-                            Process.Start(new ProcessStartInfo("http://localhost:" + node.Network.DefaultAPIPort) { UseShellExecute = true });
-                        }).Start();
+                            new Thread(delegate ()
+                            {
+                                System.Threading.Thread.Sleep(1000 * 3);
+                                Process.Start(new ProcessStartInfo("http://localhost:" + node.Network.DefaultAPIPort) { UseShellExecute = true });
+                            }).Start();
+                        }
                     }
+                    catch { }
                     await node.RunAsync();
                 }
             }
