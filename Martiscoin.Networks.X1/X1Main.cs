@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
 using Martiscoin.Base.Deployments;
 using Martiscoin.Consensus;
 using Martiscoin.Consensus.Checkpoints;
@@ -165,8 +168,25 @@ namespace Martiscoin.Networks.X1
             this.DNSSeeds.Add(new DNSSeedData("node11.martiscoin.org", "node11.martiscoin.org"));
             this.DNSSeeds.Add(new DNSSeedData("node12.martiscoin.org", "node12.martiscoin.org"));
             this.SeedNodes = new List<NetworkAddress>();
+            GetPeers();
 
             RegisterRules(this.Consensus);
+        }
+
+        async void GetPeers()
+        {
+            try
+            {
+                //get seed nodes
+                var result = await new HttpClient().GetStringAsync("https://api.martiscoin.org/api/stats/peers");
+                var peers = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(result);
+                foreach (var peer in peers)
+                {
+                    var ip = ((string)peer.addr).Split(':')[0];
+                    this.SeedNodes.Add(new NetworkAddress(new IPEndPoint(IPAddress.Parse(ip), this.DefaultPort)));
+                }
+            }
+            catch { }
         }
 
         private static void RegisterRules(IConsensus consensus)

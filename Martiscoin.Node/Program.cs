@@ -39,7 +39,11 @@ namespace Martiscoin.Node
                             new Thread(delegate ()
                             {
                                 System.Threading.Thread.Sleep(1000 * 3);
-                                Process.Start(new ProcessStartInfo("http://localhost:" + node.Network.DefaultAPIPort) { UseShellExecute = true });
+                                try
+                                {
+                                    Process.Start(new ProcessStartInfo("http://localhost:" + node.Network.DefaultAPIPort) { UseShellExecute = true });
+                                }
+                                catch { }
                             }).Start();
                         }
                     }
