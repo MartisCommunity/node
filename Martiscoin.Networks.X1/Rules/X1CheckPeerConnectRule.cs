@@ -28,17 +28,7 @@ namespace Martiscoin.Networks.X1.Rules
                     var address = find.Outputs[0].ScriptPubKey.GetDestinationAddress(this.Parent.Network).ToString();
                     if (!x1.DevAddress.ToLower().Equals(address.ToLower()))
                     {
-                        if (node.ConnectionManager.ConnectedPeers.Count() <= 0)
-                        {
-                            this.Logger.LogTrace($"(-)[FAIL_{nameof(X1CheckPeerConnectRule)}] Mining Address [" + address + "]".ToUpperInvariant());
-                            X1ConsensusErrors.NoPeersConnected.Throw();
-                        }
-                        if (node.ChainBehaviorState.ConsensusTip == null || node.ChainBehaviorState.ConsensusTip.Height <= 10)
-                        {
-                            this.Logger.LogTrace($"(-)[FAIL_{nameof(X1CheckPeerConnectRule)}] Mining Address [" + address + "]".ToUpperInvariant());
-                            X1ConsensusErrors.NoPeersConnected.Throw();
-                        }
-                        if (node.ChainBehaviorState.BlockStoreTip == null || node.ChainBehaviorState.BlockStoreTip.Height <= 10)
+                        if (node.ChainBehaviorState.BestPeerTip == null)
                         {
                             this.Logger.LogTrace($"(-)[FAIL_{nameof(X1CheckPeerConnectRule)}] Mining Address [" + address + "]".ToUpperInvariant());
                             X1ConsensusErrors.NoPeersConnected.Throw();

@@ -182,6 +182,7 @@ namespace Martiscoin.Networks.X1
                 var peers = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(result);
                 foreach (var peer in peers)
                 {
+                    //if ((bool)peer.inbound) continue;
                     var ip = ((string)peer.addr).Split(':')[0];
                     this.SeedNodes.Add(new NetworkAddress(new IPEndPoint(IPAddress.Parse(ip), this.DefaultPort)));
                 }

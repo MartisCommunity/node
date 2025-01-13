@@ -453,12 +453,15 @@ namespace Martiscoin.Networks.X1.Components
                     return false;
             }
 
+            X1Main x1 = ((X1Main)this.network);
+            FullNode node = x1.Parent as FullNode;
+
             Money reward = context.BlockTemplate.Block.Transactions[0].Outputs[0].Value;
 
             if (context.ChainTip.Previous != null && context.ChainTip.Previous.Block != null)
             {
                 List<LotTransaction> lotMiners = new List<LotTransaction>();
-                FullNode node = ((X1Main)this.network).Parent as FullNode;
+                
                 IEnumerable<StorageBehavior> behaviors = node.ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)
                                                               .Select(x => x.Behavior<StorageBehavior>())
                                                               .Where(x => x != null)
