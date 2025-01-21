@@ -4,13 +4,21 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using Martiscoin.Base.Deployments;
+using Martiscoin.Connection.Broadcasting;
 using Martiscoin.Consensus;
+using Martiscoin.Consensus.BlockInfo;
 using Martiscoin.Consensus.Checkpoints;
+using Martiscoin.Features.BlockStore;
 using Martiscoin.Features.Consensus.Rules.CommonRules;
 using Martiscoin.Features.Consensus.Rules.ProvenHeaderRules;
 using Martiscoin.Features.Consensus.Rules.UtxosetRules;
 using Martiscoin.Features.MemoryPool.Rules;
+using Martiscoin.Features.Wallet.Types;
+using Martiscoin.Interfaces;
 using Martiscoin.NBitcoin;
 using Martiscoin.NBitcoin.BouncyCastle.math;
 using Martiscoin.NBitcoin.DataEncoders;
@@ -20,6 +28,8 @@ using Martiscoin.Networks.X1.Deployments;
 using Martiscoin.Networks.X1.Policies;
 using Martiscoin.Networks.X1.Rules;
 using Martiscoin.P2P;
+using Martiscoin.P2P.Protocol.Payloads;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Martiscoin.Networks.X1
 {
@@ -28,7 +38,8 @@ namespace Martiscoin.Networks.X1
         public string DevAddress { get { return "msc1q800r07ydcm3e5tm62y9gr8m9tl67s0s4yx847r"; } }
         public decimal Devfee { get { return 0.0M; } }
         public IFullNode Parent { get; set; }
-        public int StakeHeight = 1000;
+        public int StakeHeight = 10;
+        public List<NodeInfo> RegsiterNodes { get; set; }
 
         /// <summary>
         ///     An absolute (flat) minimum fee per transaction, independent of the transaction
@@ -40,17 +51,18 @@ namespace Martiscoin.Networks.X1
 
         public X1Main()
         {
+            this.RegsiterNodes = new List<NodeInfo>();
             this.Name = "Martiscoin";
             this.NetworkType = NetworkType.Mainnet;
             this.CoinTicker = "MSC";
             this.RootFolderName = "";
             this.DefaultConfigFilename = "msc.conf";
             this.Magic = 0x4D5343; //
-            this.DefaultPort = 29333; // new
-            this.DefaultRPCPort = 29332; // new 
-            this.DefaultAPIPort = 29334; // new
-            this.DefaultMaxOutboundConnections = 16;
-            this.DefaultMaxInboundConnections = 109;
+            this.DefaultPort = 39333; // new
+            this.DefaultRPCPort = 39332; // new 
+            this.DefaultAPIPort = 39334; // new
+            this.DefaultMaxOutboundConnections = 5;
+            this.DefaultMaxInboundConnections = 10;
             this.MaxTimeOffsetSeconds = 25 * 60;
             this.DefaultBanTimeSeconds = 8000;
             this.MaxTipAge = 48 * 60 * 60;
@@ -118,19 +130,19 @@ namespace Martiscoin.Networks.X1
                 coinbaseMaturity: 20,
                 premineHeight: 0,
                 premineReward: Money.Coins(0),
-                proofOfWorkReward: Money.Coins(1),
-                targetTimespan: TimeSpan.FromSeconds(15 * 338),
-                targetSpacing: TimeSpan.FromSeconds(15),
+                proofOfWorkReward: Money.Coins(2),
+                targetTimespan: TimeSpan.FromSeconds(30 * 338),
+                targetSpacing: TimeSpan.FromSeconds(30),
                 powAllowMinDifficultyBlocks: false,
                 posNoRetargeting: false,
                 powNoRetargeting: false,
                 powLimit: new Target(new uint256("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")),
                 minimumChainWork: null,
                 isProofOfStake: true,
-                lastPowBlock: 50000,
+                lastPowBlock: 25000,
                 proofOfStakeLimit: new BigInteger(uint256.Parse("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
-                proofOfStakeLimitV2: new BigInteger(uint256.Parse("000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
-                proofOfStakeReward: Money.Coins(1),
+                proofOfStakeLimitV2: new BigInteger(uint256.Parse("000000000fffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
+                proofOfStakeReward: Money.Coins(2),
                 proofOfStakeTimestampMask: 0x0000003F // 64 sec
             );
 
@@ -155,20 +167,24 @@ namespace Martiscoin.Networks.X1
 
             this.Checkpoints = new Dictionary<int, CheckpointInfo>();
             this.DNSSeeds = new List<DNSSeedData>();
-            this.DNSSeeds.Add(new DNSSeedData("node1.martiscoin.org", "node1.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node2.martiscoin.org", "node2.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node3.martiscoin.org", "node3.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node4.martiscoin.org", "node4.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node5.martiscoin.org", "node5.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node6.martiscoin.org", "node6.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node7.martiscoin.org", "node7.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node8.martiscoin.org", "node8.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node9.martiscoin.org", "node9.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node10.martiscoin.org", "node10.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node11.martiscoin.org", "node11.martiscoin.org"));
-            this.DNSSeeds.Add(new DNSSeedData("node12.martiscoin.org", "node12.martiscoin.org"));
+
+            //this.DNSSeeds.Add(new DNSSeedData("node1.martiscoin.org", "node1.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node2.martiscoin.org", "node2.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node3.martiscoin.org", "node3.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node4.martiscoin.org", "node4.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node5.martiscoin.org", "node5.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node6.martiscoin.org", "node6.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node7.martiscoin.org", "node7.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node8.martiscoin.org", "node8.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node9.martiscoin.org", "node9.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node10.martiscoin.org", "node10.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node11.martiscoin.org", "node11.martiscoin.org"));
+            //this.DNSSeeds.Add(new DNSSeedData("node12.martiscoin.org", "node12.martiscoin.org"));
+
             this.SeedNodes = new List<NetworkAddress>();
-            GetPeers();
+            //this.GetPeers();
+
+            this.SetNodeSync();
 
             RegisterRules(this.Consensus);
         }
@@ -188,6 +204,47 @@ namespace Martiscoin.Networks.X1
                 }
             }
             catch { }
+        }
+
+        void SetNodeSync()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(NodeUUID))
+                        {
+                            var find = this.Parent.Services.ServiceProvider.GetRequiredService(typeof(IBroadcasterManager));
+                            if (find != null)
+                            {
+                                var broadcasterManager = find as BroadcasterManager;
+                                broadcasterManager.PropagateNodeSyncToPeersAsync(this.NodeUUID);
+                            }
+
+                            IEnumerable<NodeSyncBehavior> behaviors = ((FullNode)this.Parent).ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)
+                                                              .Select(x => x.Behavior<NodeSyncBehavior>())
+                                                              .Where(x => x != null)
+                                                              .ToList();
+                            foreach (NodeSyncBehavior behavior in behaviors) {
+                                if (behavior == null) continue;
+                                foreach (NodeInfo info in behavior.NetWorkNodes)
+                                {
+                                    RegsiterNodes.RemoveAll(s => { return s.NodeID == info.NodeID; });
+                                    RegsiterNodes.Add(info);
+                                }
+                            }
+
+                            this.TotalNodes = RegsiterNodes.Count;
+                            this.OnlineNodes = RegsiterNodes.FindAll(s => { return s.LstUpdateTime >= DateTime.UtcNow.AddMinutes(-5); }).Count();
+
+                        }
+                    }
+                    catch { }
+                    Thread.Sleep(1000 * 60);
+                }
+            });
         }
 
         private static void RegisterRules(IConsensus consensus)

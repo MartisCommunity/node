@@ -1,12 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
   <PropertyGroup>
-<TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyTitle>Martiscoin.Node</AssemblyTitle>
     <AssemblyName>Martiscoin.Node</AssemblyName>
     <PackageId>Martiscoin.Node</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <ApplicationIcon>martiscoin.ico</ApplicationIcon>
+    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+    <IsPublishable>True</IsPublishable>
+    <EnableSdkContainerSupport>True</EnableSdkContainerSupport>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="martiscoin.ico" />

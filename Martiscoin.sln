@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Martiscoin.Features.Persist
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Martiscoin.Networks.X1", "Martiscoin.Networks.X1\Martiscoin.Networks.X1.csproj", "{9A2BA15A-C316-42B4-8E4D-E01B4873190C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Martiscoin", "..\core\Martiscoin.core.csproj", "{E6B03B34-200B-438E-AF4B-27F9D1B5CDB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Martiscoin.core", "..\core\Martiscoin.core.csproj", "{E6B03B34-200B-438E-AF4B-27F9D1B5CDB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

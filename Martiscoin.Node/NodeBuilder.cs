@@ -41,7 +41,7 @@ namespace Martiscoin.Node
             IFullNodeBuilder nodeBuilder = new FullNodeBuilder()
             .UseNodeSettings(settings)
             .UseBlockStore()
-            .UseStorage()
+            .UseStorage().UseNodeSync()
             .UseMempool()
             .UseBlockNotification()
             .UseTransactionNotification()

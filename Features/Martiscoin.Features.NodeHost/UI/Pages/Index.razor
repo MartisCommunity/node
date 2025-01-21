@@ -130,6 +130,108 @@
         </div>
     </div>
 
+    <div class="row mb-3" style="margin-bottom:0px !important">
+        @{
+        }
+        <div class="col-xl-3 col-sm-6 " style="margin-bottom:20px;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="d-flex align-items-center align-self-start">
+                                <h3 class="text-success mb-0">@this.Network.OnlineNodes</h3>
+                                <p class="text-danger ml-2 mb-0 font-weight-medium"></p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="icon icon-box-success">
+                                <span class="mdi mdi-arrow-top-right icon-item"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Online Node</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 " style="margin-bottom:20px;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="d-flex align-items-center align-self-start">
+                                <h3 class="text-success mb-0">@this.Network.TotalNodes</h3>
+                                <p class="text-danger ml-2 mb-0 font-weight-medium"></p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="icon icon-box-danger">
+                                <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Total Node</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 " style="margin-bottom:20px;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="d-flex align-items-center align-self-start">
+                                @{
+                                    if (string.IsNullOrEmpty(this.Network.LHashrate))
+                                    {
+                                        <h3 class="text-success mb-0">0 m/s</h3>
+                                    }
+                                    else
+                                    {
+                                        <h3 class="text-success mb-0">@this.Network.LHashrate m/s</h3>
+                                    }
+                                }
+                                <p class="text-success ml-2 mb-0 font-weight-medium"></p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="icon icon-box-success ">
+                                <span class="mdi mdi-arrow-top-right icon-item"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Local Hashrate</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 " style="margin-bottom:20px;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="d-flex align-items-center align-self-start">
+                                @{
+                                    if (string.IsNullOrEmpty(this.Network.NHashrate))
+                                    {
+                                        <h3 class="text-success mb-0">0 m/s</h3>
+                                    }
+                                    else
+                                    {
+                                        <h3 class="text-success mb-0">@this.Network.NHashrate m/s</h3>
+                                    }
+                                }
+                                <p class="text-success ml-2 mb-0 font-weight-medium"></p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="icon icon-box-success ">
+                                <span class="mdi mdi-arrow-top-right icon-item"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Network Hashrate</h6>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-xl-12 col-sm-12 ">

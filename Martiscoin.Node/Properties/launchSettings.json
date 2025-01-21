@@ -3,6 +3,9 @@
     "MSC (MAIN)": {
       "commandName": "Project",
       "commandLineArgs": "--chain=MSC"
+    },
+    "Container (.NET SDK)": {
+      "commandName": "SdkContainer"
     }
   }
 }

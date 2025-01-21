@@ -230,6 +230,8 @@ namespace Martiscoin.Networks.X1.Components
             return MineBlockCpu(context);
         }
 
+        object totalLock = new object();
+
         private bool MineBlockCpu(MineBlockContext context)
         {
             context.ExtraNonce = IncrementExtraNonce(context.BlockTemplate.Block, context.ChainTip, context.ExtraNonce);
@@ -244,6 +246,7 @@ namespace Martiscoin.Networks.X1.Components
             var totalNonce = batch * loopLength;
             uint winnerNonce = 0;
             bool found = false;
+            int total = 0;
 
             ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = threads, CancellationToken = this.miningCancellationTokenSource.Token };
 
@@ -262,13 +265,13 @@ namespace Martiscoin.Networks.X1.Components
                 var headerBytes = block.Header.ToBytes(this.network.Consensus.ConsensusFactory);
                 var tempBuffer = X1HashX13.Instance.Hash(headerBytes);
                 headerBytes = tempBuffer.Concat(new byte[16]);
-
                 uint nonce = (uint)index * loopLength;
                 ulong currentHeight = context.CurrentHeight;
                 var end = nonce + loopLength;
 
                 while (nonce < end)
                 {
+                    lock (totalLock) { total++; }
                     bool lotFound = false;
                     uint256 lotBits = ((X1BlockHeader)block.Header).LotPowLimit;
                     bool isFound = CheckProofOfWork(headerBytes, nonce, bits, lotBits, out lotFound);
@@ -295,6 +298,8 @@ namespace Martiscoin.Networks.X1.Components
                 }
             });
 
+            this.LogMiningInformation(context.ExtraNonce, total, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{threads} threads");
+
             if (found)
             {
                 block.Header.Nonce = winnerNonce;
@@ -302,7 +307,7 @@ namespace Martiscoin.Networks.X1.Components
                     return true;
             }
 
-            this.LogMiningInformation(context.ExtraNonce, totalNonce, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{threads} threads");
+            
 
             return false;
         }
@@ -324,10 +329,12 @@ namespace Martiscoin.Networks.X1.Components
             var tempBuffer = X1HashX13.Instance.Hash(headerBytes);
             headerBytes = tempBuffer.Concat(new byte[16]);
 
-            uint256 bits = block.Header.Bits.ToUInt256();
+            uint256 bits = block.Header.Bits.ToUInt256(20);
+            
             if (currentHeight > lstLotFoundHeight)
             {
                 uint256 lotBits = ((X1BlockHeader)block.Header).LotPowLimit;
+
                 var lotFoundNonce = this.openCLMiner.FindPow(headerBytes, lotBits.ToBytes(), nonceStart, iterations);
                 if (lotFoundNonce > 0)
                 {
@@ -340,6 +347,9 @@ namespace Martiscoin.Networks.X1.Components
                 block.Header.Nonce = lotFoundNonce;
                 if (block.Header.CheckProofOfWork())
                 {
+
+                    this.LogMiningInformation(context.ExtraNonce, lotFoundNonce, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
+
                     return true;
                 }
             }
@@ -350,6 +360,9 @@ namespace Martiscoin.Networks.X1.Components
                 block.Header.Nonce = foundNonce;
                 if (block.Header.CheckProofOfWork())
                 {
+
+                    this.LogMiningInformation(context.ExtraNonce, foundNonce, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
+
                     return true;
                 }
             }
@@ -378,6 +391,9 @@ namespace Martiscoin.Networks.X1.Components
                                        $"hashes={totalHashes}, execution={totalSeconds} sec, " +
                                        $"hash-rate={MHashedPerSec} MHash/sec ({minerInfo}), " +
                                        $"network hash-rate ~{MHashedPerSecTotal} MHash/sec");
+
+            this.network.LHashrate = MHashedPerSec.ToString("0.00");
+            this.network.NHashrate = MHashedPerSecTotal.ToString("0.00");
         }
 
         private static bool CheckProofOfWork(byte[] header, uint nonce, uint256 bits, uint256 lotBits, out bool lotFound)
@@ -633,6 +649,21 @@ namespace Martiscoin.Networks.X1.Components
                 this.MaxTries = maxTries;
                 this.ReserveScript = reserveScript;
             }
+        }
+
+        uint256 ToUInt256(BigInteger input)
+        {
+            byte[] array = input.ToByteArray();
+
+            int missingZero = 32 - array.Length;
+
+            if (missingZero < 0)
+                return new uint256(array.Skip(Math.Abs(missingZero)).ToArray(), false);
+
+            if (missingZero > 0)
+                return new uint256(new byte[missingZero].Concat(array).ToArray(), false);
+
+            return new uint256(array, false);
         }
 
         /// <summary>

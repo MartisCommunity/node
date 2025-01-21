@@ -22,6 +22,7 @@ namespace Martiscoin.Networks.X1.Rules
             var block = context.ValidationContext.BlockToValidate;
             if (block != null && block.Transactions.Count > 0)
             {
+                if (block.Transactions.Count(a => a.IsCoinStake == true) > 0) return Task.CompletedTask;
                 var find = block.Transactions.Find(a => a.IsCoinBase == true);
                 if (find != null && find.Outputs.Count > 0)
                 {

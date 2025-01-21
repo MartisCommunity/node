@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cloo;
+using Martiscoin.NBitcoin;
+using Martiscoin.NBitcoin.BouncyCastle.math;
 using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace Martiscoin.Networks.X1.Components
 {
@@ -159,6 +162,21 @@ namespace Martiscoin.Networks.X1.Components
             this.computeProgram = null;
             this.computeContext?.Dispose();
             this.computeContext = null;
+        }
+
+        uint256 ToUInt256(BigInteger input)
+        {
+            byte[] array = input.ToByteArray();
+
+            int missingZero = 32 - array.Length;
+
+            if (missingZero < 0)
+                return new uint256(array.Skip(Math.Abs(missingZero)).ToArray(), false);
+
+            if (missingZero > 0)
+                return new uint256(new byte[missingZero].Concat(array).ToArray(), false);
+
+            return new uint256(array, false);
         }
 
         /// <summary>
