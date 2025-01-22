@@ -53,6 +53,7 @@ namespace Martiscoin.Features.Consensus.Rules.UtxosetRules
         /// <inheritdoc />
         public override void CheckBlockReward(RuleContext context, Money fees, int height, Block block)
         {
+            if (height <= 1) return;
             if (BlockStake.IsProofOfStake(block))
             {
                 var posRuleContext = context as PosRuleContext;

@@ -91,7 +91,7 @@
                                         <tr>
                                             @* @onclick="ViewTransaction"> *@
                                             <td>@transaction.Type</td>
-                                            <td class="text-center">@String.Format("{0:f}", transaction.Timestamp)</td>
+                                            <td class="text-center">@String.Format("{0:F}", transaction.Timestamp) UTC</td>
                                             <td class="text-right">@transaction.Amount</td>
                                             <td class="text-right">@transaction.ConfirmedInBlock</td>
                                             <td class="text-center">

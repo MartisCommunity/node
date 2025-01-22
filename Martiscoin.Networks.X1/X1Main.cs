@@ -38,7 +38,7 @@ namespace Martiscoin.Networks.X1
         public string DevAddress { get { return "msc1q800r07ydcm3e5tm62y9gr8m9tl67s0s4yx847r"; } }
         public decimal Devfee { get { return 0.0M; } }
         public IFullNode Parent { get; set; }
-        public int StakeHeight = 10;
+        public int StakeHeight = 1000;
         public List<NodeInfo> RegsiterNodes { get; set; }
 
         /// <summary>
@@ -52,6 +52,7 @@ namespace Martiscoin.Networks.X1
         public X1Main()
         {
             this.RegsiterNodes = new List<NodeInfo>();
+            this.ChainStop = true;//arrive to lastpowblock for test round2
             this.Name = "Martiscoin";
             this.NetworkType = NetworkType.Mainnet;
             this.CoinTicker = "MSC";
@@ -124,13 +125,13 @@ namespace Martiscoin.Networks.X1
                 bip9Deployments: bip9Deployments,
                 bip34Hash: this.Genesis.GetHash(),
                 minerConfirmationWindow: 2016,
-                maxReorgLength: 125,
+                maxReorgLength: 10,
                 defaultAssumeValid: uint256.Zero,
                 maxMoney: long.MaxValue,
                 coinbaseMaturity: 20,
                 premineHeight: 0,
                 premineReward: Money.Coins(0),
-                proofOfWorkReward: Money.Coins(2),
+                proofOfWorkReward: Money.Coins(4),
                 targetTimespan: TimeSpan.FromSeconds(30 * 338),
                 targetSpacing: TimeSpan.FromSeconds(30),
                 powAllowMinDifficultyBlocks: false,
@@ -139,10 +140,10 @@ namespace Martiscoin.Networks.X1
                 powLimit: new Target(new uint256("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")),
                 minimumChainWork: null,
                 isProofOfStake: true,
-                lastPowBlock: 25000,
+                lastPowBlock: 15000,
                 proofOfStakeLimit: new BigInteger(uint256.Parse("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
                 proofOfStakeLimitV2: new BigInteger(uint256.Parse("000000000fffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
-                proofOfStakeReward: Money.Coins(2),
+                proofOfStakeReward: Money.Coins(4),
                 proofOfStakeTimestampMask: 0x0000003F // 64 sec
             );
 
@@ -182,7 +183,7 @@ namespace Martiscoin.Networks.X1
             //this.DNSSeeds.Add(new DNSSeedData("node12.martiscoin.org", "node12.martiscoin.org"));
 
             this.SeedNodes = new List<NetworkAddress>();
-            //this.GetPeers();
+            this.GetPeers();
 
             this.SetNodeSync();
 

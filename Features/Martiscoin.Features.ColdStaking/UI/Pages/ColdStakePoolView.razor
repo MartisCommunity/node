@@ -105,7 +105,7 @@
                                         }
                                         @if (item.Value.StakingExpiry != null)
                                         {
-                                            <td class="text-center">@String.Format("{0:f}", item.Value.StakingExpiry) (@ParseDate(item.Value.StakingExpiry))</td>
+                                            <td class="text-center">@String.Format("{0:F}", item.Value.StakingExpiry) UTC (@ParseDate(item.Value.StakingExpiry))</td>
                                         }
                                         else
                                         {

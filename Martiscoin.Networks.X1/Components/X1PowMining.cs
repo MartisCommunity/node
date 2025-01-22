@@ -472,46 +472,78 @@ namespace Martiscoin.Networks.X1.Components
             X1Main x1 = ((X1Main)this.network);
             FullNode node = x1.Parent as FullNode;
 
+            if (context.ChainHeight <= 50 || node.ChainBehaviorState.BestPeerTip == null)
+            {
+                var address = context.BlockTemplate.Block.Transactions[0].Outputs[0].ScriptPubKey.GetDestinationAddress(this.network).ToString();
+                if (!x1.DevAddress.ToLower().Equals(address.ToLower())) return false;
+            }
+
             Money reward = context.BlockTemplate.Block.Transactions[0].Outputs[0].Value;
 
-            if (context.ChainTip.Previous != null && context.ChainTip.Previous.Block != null)
+            if (context.CurrentHeight <= 0)
             {
-                List<LotTransaction> lotMiners = new List<LotTransaction>();
-                
-                IEnumerable<StorageBehavior> behaviors = node.ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)
-                                                              .Select(x => x.Behavior<StorageBehavior>())
-                                                              .Where(x => x != null)
-                                                              .ToList();
-                foreach (StorageBehavior behavior in behaviors)
+                //load airdrop file
+                var path = node.DataFolder.RootPath + "\\airdrop.json";
+                if (System.IO.File.Exists(path))
                 {
-                    if (behavior != null)
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(path))
                     {
-                        var txs = behavior.GetMinerTx(context.CurrentHeight);
-                        foreach (var tx in txs)
+                        var airdropMiners = sr.ReadToEnd().Split(new string[] { "\n" }, StringSplitOptions.None);
+                        foreach (var airdrop in airdropMiners)
                         {
-                            if (tx.LotNonce == 0) continue;
-                            if (tx.LotFoundHeight != context.CurrentHeight) continue;
-                            if (lotMiners.FindAll(m => m.LotNonce == tx.LotNonce).Count > 0) continue;
-                            if (lotMiners.FindAll(m => m.Address.ToLower() == tx.Address.ToLower()).Count > 0) continue;
-                            if (((X1BlockHeader)context.BlockTemplate.Block.Header).CheckLotProofOfWork(tx.LotNonce)) continue;
-                            lotMiners.Add(tx);
+                            if (string.IsNullOrEmpty(airdrop)) continue;
+                            dynamic mine = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(airdrop);
+                            if (((ulong)mine.Balance) <= 0) continue;
+                            context.BlockTemplate.Block.Transactions[0].Outputs.Add(new TxOut()
+                            {
+                                ScriptPubKey = BitcoinAddress.Create((string)mine.Address, network).ScriptPubKey,
+                                Value = (ulong)mine.Balance
+                            });
                         }
                     }
                 }
-                if (lotMiners.Count > 0)
+            }
+            else
+            {
+                if (context.ChainTip.Previous != null && context.ChainTip.Previous.Block != null)
                 {
-                    Money lotReward = ((reward / 10) * 9) / lotMiners.Count;
-                    foreach (LotTransaction tx in lotMiners)
-                    {
-                        context.BlockTemplate.Block.Transactions[0].Outputs.Add(new TxOut()
-                        {
-                            ScriptPubKey = BitcoinAddress.Create(tx.Address, network).ScriptPubKey,
-                            Value = lotReward
-                        });
-                    }
+                    List<LotTransaction> lotMiners = new List<LotTransaction>();
 
-                    //block found miner
-                    context.BlockTemplate.Block.Transactions[0].Outputs[0].Value = (reward / 10) * 1;
+                    IEnumerable<StorageBehavior> behaviors = node.ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)
+                                                                  .Select(x => x.Behavior<StorageBehavior>())
+                                                                  .Where(x => x != null)
+                                                                  .ToList();
+                    foreach (StorageBehavior behavior in behaviors)
+                    {
+                        if (behavior != null)
+                        {
+                            var txs = behavior.GetMinerTx(context.CurrentHeight);
+                            foreach (var tx in txs)
+                            {
+                                if (tx.LotNonce == 0) continue;
+                                if (tx.LotFoundHeight != context.CurrentHeight) continue;
+                                if (lotMiners.FindAll(m => m.LotNonce == tx.LotNonce).Count > 0) continue;
+                                if (lotMiners.FindAll(m => m.Address.ToLower() == tx.Address.ToLower()).Count > 0) continue;
+                                if (((X1BlockHeader)context.BlockTemplate.Block.Header).CheckLotProofOfWork(tx.LotNonce)) continue;
+                                lotMiners.Add(tx);
+                            }
+                        }
+                    }
+                    if (lotMiners.Count > 0)
+                    {
+                        Money lotReward = ((reward / 10) * 9) / lotMiners.Count;
+                        foreach (LotTransaction tx in lotMiners)
+                        {
+                            context.BlockTemplate.Block.Transactions[0].Outputs.Add(new TxOut()
+                            {
+                                ScriptPubKey = BitcoinAddress.Create(tx.Address, network).ScriptPubKey,
+                                Value = lotReward
+                            });
+                        }
+
+                        //block found miner
+                        context.BlockTemplate.Block.Transactions[0].Outputs[0].Value = (reward / 10) * 1;
+                    }
                 }
             }
 
