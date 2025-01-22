@@ -311,6 +311,7 @@ namespace Martiscoin.Networks.X1.Components
 
             return false;
         }
+
         static ulong lstLotFoundHeight = 0;
 
         private bool MineBlockOpenCL(MineBlockContext context)
@@ -319,7 +320,7 @@ namespace Martiscoin.Networks.X1.Components
             block.Header.Nonce = 0;
             context.ExtraNonce = this.IncrementExtraNonce(block, context.ChainTip, context.ExtraNonce);
 
-            var iterations = uint.MaxValue / (uint)this.minerSettings.OpenCLWorksizeSplit;
+            uint iterations = 20_000_000;
             var nonceStart = ((uint)context.ExtraNonce - 1) * iterations;
 
             ulong currentHeight = context.CurrentHeight;
@@ -329,7 +330,7 @@ namespace Martiscoin.Networks.X1.Components
             var tempBuffer = X1HashX13.Instance.Hash(headerBytes);
             headerBytes = tempBuffer.Concat(new byte[16]);
 
-            uint256 bits = block.Header.Bits.ToUInt256(20);
+            uint256 bits = block.Header.Bits.ToUInt256();
             
             if (currentHeight > lstLotFoundHeight)
             {

@@ -62,8 +62,8 @@ namespace Martiscoin.Networks.X1
             this.DefaultPort = 39333; // new
             this.DefaultRPCPort = 39332; // new 
             this.DefaultAPIPort = 39334; // new
-            this.DefaultMaxOutboundConnections = 5;
-            this.DefaultMaxInboundConnections = 10;
+            this.DefaultMaxOutboundConnections = 16;
+            this.DefaultMaxInboundConnections = 109;
             this.MaxTimeOffsetSeconds = 25 * 60;
             this.DefaultBanTimeSeconds = 8000;
             this.MaxTipAge = 48 * 60 * 60;
@@ -125,7 +125,7 @@ namespace Martiscoin.Networks.X1
                 bip9Deployments: bip9Deployments,
                 bip34Hash: this.Genesis.GetHash(),
                 minerConfirmationWindow: 2016,
-                maxReorgLength: 10,
+                maxReorgLength: 125,
                 defaultAssumeValid: uint256.Zero,
                 maxMoney: long.MaxValue,
                 coinbaseMaturity: 20,
