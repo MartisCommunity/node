@@ -6,9 +6,8 @@
 namespace Martiscoin.Networks.X1.Properties {
     using System;
     
-    /// <summary>
-    /// 
-    /// </summary>
+    
+
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -22,9 +21,6 @@ namespace Martiscoin.Networks.X1.Properties {
         internal Resources() {
         }
         
-        /// <summary>
-        ///
-        /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
@@ -36,10 +32,7 @@ namespace Martiscoin.Networks.X1.Properties {
             }
         }
         
-        /// <summary>
-        ///
-        ///
-        /// </summary>
+
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
             get {
@@ -50,135 +43,33 @@ namespace Martiscoin.Networks.X1.Properties {
             }
         }
         
-        /// <summary>
-        /// 
-        /// * Developed by Claudio André &lt;claudioandre.br at gmail.com&gt; in 2012
-        /// *
-        /// * Copyright (c) 2012-2015 Claudio André &lt;claudioandre.br at gmail.com&gt;
-        /// * This program comes with ABSOLUTELY NO WARRANTY; express or implied.
-        /// *
-        /// * This is free software, and you are welcome to redistribute it
-        /// * under certain conditions; as expressed here
-        /// * http://www.gnu.org/licenses/gpl-2.0.html
-        /// */
-        ///
-        ///# ifndef OPENCL_DEVICE_INFO_H
-        ///#define OPENCL_DEVICE_INFO_H
-        ///
-        /////Copied from opencl_common.h
-        ///#define DEV_UNKNOWN
-        /// </summary>
+
         internal static string SpartacryptOpenCLMiner_opencl_device_info_h {
             get {
                 return ResourceManager.GetString("SpartacryptOpenCLMiner.opencl_device_info.h", resourceCulture);
             }
         }
-        
-        /// <summary>
-        /// 
-        /// * OpenCL common macros
-        /// *
-        /// * Copyright (c) 2014-2015, magnum
-        /// * This software is hereby released to the general public under
-        /// * the following terms: Redistribution and use in source and binary
-        /// * forms, with or without modification, are permitted.
-        /// *
-        /// * NOTICE: After changes in headers, with nvidia driver you probably
-        /// * need to drop cached kernels to ensure the changes take effect:
-        /// *
-        /// * rm -fr ~/.nv/ComputeCache
-        /// *
-        /// */
-        ///
-        ///#ifndef _OPENCL_MISC_H
-        ///#define _OPENCL_MISC_H
-        ///
-        /////#include &quot;openc
-        /// </summary>
+
         internal static string SpartacryptOpenCLMiner_opencl_misc_h {
             get {
                 return ResourceManager.GetString("SpartacryptOpenCLMiner.opencl_misc.h", resourceCulture);
             }
         }
         
-        /// <summary>
-        /// 
-        /// * Developed by Claudio André &lt;claudioandre.br at gmail.com&gt; in 2012
-        /// *
-        /// * Copyright (c) 2012-2015 Claudio André &lt;claudioandre.br at gmail.com&gt;
-        /// * This program comes with ABSOLUTELY NO WARRANTY; express or implied.
-        /// *
-        /// * This is free software, and you are welcome to redistribute it
-        /// * under certain conditions; as expressed here
-        /// * http://www.gnu.org/licenses/gpl-2.0.html
-        /// */
-        ///
-        ///#ifndef OPENCL_SHA2_COMMON_H
-        ///#define OPENCL_SHA2_COMMON_H
-        ///
-        /// // Type names definition.
-        /// // NOTE: long is always 64-b 
-        /// </summary>
+
         internal static string SpartacryptOpenCLMiner_opencl_sha2_common_h {
             get {
                 return ResourceManager.GetString("SpartacryptOpenCLMiner.opencl_sha2_common.h", resourceCulture);
             }
         }
-        
-        /// <summary>
-        /// 
-        /// * Developed by Claudio André &lt;claudioandre.br at gmail.com&gt; in 2012
-        /// *
-        /// * Copyright (c) 2012-2015 Claudio André &lt;claudioandre.br at gmail.com&gt;
-        /// * This program comes with ABSOLUTELY NO WARRANTY; express or implied.
-        /// *
-        /// * This is free software, and you are welcome to redistribute it
-        /// * under certain conditions; as expressed here
-        /// * http://www.gnu.org/licenses/gpl-2.0.html
-        /// */
-        ///
-        ///#ifndef OPENCL_SHA512_H
-        ///#define OPENCL_SHA512_H
-        ///
-        /////#include &quot;opencl_sha2_common.h&quot;
-        ///
-        ///#define MIN_KEYS_PER_CRYPT 
-        /// </summary>
+
         internal static string SpartacryptOpenCLMiner_opencl_sha512_h {
             get {
                 return ResourceManager.GetString("SpartacryptOpenCLMiner.opencl_sha512.h", resourceCulture);
             }
         }
         
-        /// <summary>
-        ///  // Functions and kernel for mining with sha512
-        ///
-        ///int compare_uint256(uint64_t* x, uint64_t* y)
-        ///{
-        ///#pragma unroll
-        ///    for (int i = 3; i &gt;= 0; i--) {
-        ///
-        ///        uint32_t xh = x[i] &gt;&gt; 32;
-        ///        uint32_t xl = x[i];
-        ///
-        ///        uint32_t yh = y[i] &gt;&gt; 32;
-        ///        uint32_t yl = y[i];
-        ///
-        ///        if (xh &lt; yh)
-        ///            return -1;
-        ///        if (xh &gt; yh)
-        ///            return 1;
-        ///        if (xl &lt; yl)
-        ///            return -1;
-        ///        if (xl &gt; yl)
-        ///            return 1;
-        ///    }
-        ///
-        ///    return 0;
-        ///}
-        ///
-        ///void pad_buffer
-        /// </summary>
+
         internal static string SpartacryptOpenCLMiner_sha512_miner_cl {
             get {
                 return ResourceManager.GetString("SpartacryptOpenCLMiner.sha512_miner.cl", resourceCulture);

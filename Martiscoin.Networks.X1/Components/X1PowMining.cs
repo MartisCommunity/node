@@ -320,7 +320,7 @@ namespace Martiscoin.Networks.X1.Components
             block.Header.Nonce = 0;
             context.ExtraNonce = this.IncrementExtraNonce(block, context.ChainTip, context.ExtraNonce);
 
-            uint iterations = 20_000_000;
+            uint iterations = uint.MaxValue / (uint)this.minerSettings.OpenCLWorksizeSplit;
             var nonceStart = ((uint)context.ExtraNonce - 1) * iterations;
 
             ulong currentHeight = context.CurrentHeight;
