@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -231,7 +232,13 @@ namespace Martiscoin.Features.RPC
                 await this.next.Invoke(context).ConfigureAwait(false);
 
                 if (responseMemoryStream.Length == 0)
+                {
+                    if (requestObj.Count > 0 && requestObj.ContainsKey("method") && requestObj.GetValue("method").ToString().Equals("getblock"))
+                    {
+                        throw new BlockNotFoundException("Blockhash not found");
+                    }
                     throw new Exception("Method not found");
+                }
 
                 responseMemoryStream.Position = 0;
                 using (var streamReader = new StreamReader(responseMemoryStream))
