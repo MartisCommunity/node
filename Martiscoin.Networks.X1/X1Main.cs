@@ -38,7 +38,7 @@ namespace Martiscoin.Networks.X1
         public string DevAddress { get { return "msc1q800r07ydcm3e5tm62y9gr8m9tl67s0s4yx847r"; } }
         public decimal Devfee { get { return 0.0M; } }
         public IFullNode Parent { get; set; }
-        public int StakeHeight = 1000;
+        public int StakeHeight = 25000;
         public List<NodeInfo> RegsiterNodes { get; set; }
 
         /// <summary>
@@ -52,16 +52,16 @@ namespace Martiscoin.Networks.X1
         public X1Main()
         {
             this.RegsiterNodes = new List<NodeInfo>();
-            this.ChainStop = true;//arrive to lastpowblock for test round2
+            this.ChainStop = false;//arrive to lastpowblock for test round2
             this.Name = "Martiscoin";
             this.NetworkType = NetworkType.Mainnet;
             this.CoinTicker = "MSC";
             this.RootFolderName = "";
             this.DefaultConfigFilename = "msc.conf";
-            this.Magic = 0x4D5343; //
-            this.DefaultPort = 39333; // new
-            this.DefaultRPCPort = 39332; // new 
-            this.DefaultAPIPort = 39334; // new
+            this.Magic = 0x4D53; //
+            this.DefaultPort = 19333; // new
+            this.DefaultRPCPort = 19332; // new 
+            this.DefaultAPIPort = 19334; // new
             this.DefaultMaxOutboundConnections = 16;
             this.DefaultMaxInboundConnections = 109;
             this.MaxTimeOffsetSeconds = 25 * 60;
@@ -117,7 +117,7 @@ namespace Martiscoin.Networks.X1
                 consensusOptions: consensusOptions,
                 coinType: (int)this.GenesisNonce,
                 hashGenesisBlock: this.Genesis.GetHash(),
-                subsidyHalvingInterval: 10_512_000,
+                subsidyHalvingInterval: 5_256_000,
                 majorityEnforceBlockUpgrade: 750,
                 majorityRejectBlockOutdated: 950,
                 majorityWindow: 1000,
@@ -131,7 +131,7 @@ namespace Martiscoin.Networks.X1
                 coinbaseMaturity: 20,
                 premineHeight: 0,
                 premineReward: Money.Coins(0),
-                proofOfWorkReward: Money.Coins(4),
+                proofOfWorkReward: Money.Coins(2),
                 targetTimespan: TimeSpan.FromSeconds(30 * 338),
                 targetSpacing: TimeSpan.FromSeconds(30),
                 powAllowMinDifficultyBlocks: false,
@@ -140,10 +140,10 @@ namespace Martiscoin.Networks.X1
                 powLimit: new Target(new uint256("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")),
                 minimumChainWork: null,
                 isProofOfStake: true,
-                lastPowBlock: 15000,
+                lastPowBlock: 10_500_000,
                 proofOfStakeLimit: new BigInteger(uint256.Parse("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
                 proofOfStakeLimitV2: new BigInteger(uint256.Parse("000000000fffffffffffffffffffffffffffffffffffffffffffffffffffffff").ToBytes(false)),
-                proofOfStakeReward: Money.Coins(4),
+                proofOfStakeReward: Money.Coins(2),
                 proofOfStakeTimestampMask: 0x0000003F // 64 sec
             );
 
@@ -209,7 +209,7 @@ namespace Martiscoin.Networks.X1
 
         void SetNodeSync()
         {
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
                 while (true)
                 {
@@ -221,7 +221,7 @@ namespace Martiscoin.Networks.X1
                             if (find != null)
                             {
                                 var broadcasterManager = find as BroadcasterManager;
-                                broadcasterManager.PropagateNodeSyncToPeersAsync(this.NodeUUID);
+                                await broadcasterManager.PropagateNodeSyncToPeersAsync(this.NodeUUID, RegsiterNodes);
                             }
 
                             IEnumerable<NodeSyncBehavior> behaviors = ((FullNode)this.Parent).ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)

@@ -331,7 +331,7 @@ namespace Martiscoin.Networks.X1.Components
             headerBytes = tempBuffer.Concat(new byte[16]);
 
             uint256 bits = block.Header.Bits.ToUInt256();
-            
+
             if (currentHeight > lstLotFoundHeight)
             {
                 uint256 lotBits = ((X1BlockHeader)block.Header).LotPowLimit;
@@ -349,7 +349,7 @@ namespace Martiscoin.Networks.X1.Components
                 if (block.Header.CheckProofOfWork())
                 {
 
-                    this.LogMiningInformation(context.ExtraNonce, lotFoundNonce, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
+                    this.LogMiningInformation(context.ExtraNonce, lotFoundNonce / 20, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
 
                     return true;
                 }
@@ -362,13 +362,13 @@ namespace Martiscoin.Networks.X1.Components
                 if (block.Header.CheckProofOfWork())
                 {
 
-                    this.LogMiningInformation(context.ExtraNonce, foundNonce, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
+                    this.LogMiningInformation(context.ExtraNonce, foundNonce / 20, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
 
                     return true;
                 }
             }
 
-            this.LogMiningInformation(context.ExtraNonce, iterations, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
+            this.LogMiningInformation(context.ExtraNonce, iterations / 20, this.stopwatch.Elapsed.TotalSeconds, block.Header.Bits.Difficulty, $"{this.openCLMiner.GetDeviceName()}");
 
             if (context.ExtraNonce >= this.minerSettings.OpenCLWorksizeSplit)
             {

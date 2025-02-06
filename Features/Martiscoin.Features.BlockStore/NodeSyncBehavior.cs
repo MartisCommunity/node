@@ -132,8 +132,22 @@ namespace Martiscoin.Features.BlockStore
                     case NodeSyncPayload nodeyyncpayload:
                         lock (lockObject)
                         {
-                            networkNodes.RemoveAll(tx => tx.NodeID == nodeyyncpayload.NodeID);
-                            networkNodes.Add(new NodeInfo(nodeyyncpayload.NodeID, nodeyyncpayload.IPs));
+                            List<NodeInfo> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<NodeInfo>>(nodeyyncpayload.nodes);
+                            foreach (NodeInfo node in list)
+                            {
+                                var find = networkNodes.OrderByDescending(x => x.LstUpdateTime).FirstOrDefault(x => x.NodeID == node.NodeID);
+                                if(find==null)
+                                {
+                                    networkNodes.Add(node);
+                                }
+                                else
+                                {
+                                    if (find.LstUpdateTime < node.LstUpdateTime)
+                                    {
+                                        find.LstUpdateTime = node.LstUpdateTime;
+                                    }
+                                }
+                            }
                         }
                         await this.ProcessStorageInPayloadAsync(peer, nodeyyncpayload).ConfigureAwait(false);
                         break;
@@ -182,7 +196,7 @@ namespace Martiscoin.Features.BlockStore
             try
             {
                 // Sample data to send.
-                await this.SendStorageAsync(peer, new NodeSyncPayload("", new string[] { "" })).ConfigureAwait(false);
+                //await this.SendStorageAsync(peer, new NodeSyncPayload("", new string[] { "" })).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
