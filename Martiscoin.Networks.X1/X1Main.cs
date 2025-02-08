@@ -58,7 +58,7 @@ namespace Martiscoin.Networks.X1
             this.CoinTicker = "MSC";
             this.RootFolderName = "";
             this.DefaultConfigFilename = "msc.conf";
-            this.Magic = 0x4D53; //
+            this.Magic = 0x4D617273; //
             this.DefaultPort = 19333; // new
             this.DefaultRPCPort = 19332; // new 
             this.DefaultAPIPort = 19334; // new

@@ -136,15 +136,16 @@ namespace Martiscoin.Features.BlockStore
                             foreach (NodeInfo node in list)
                             {
                                 var find = networkNodes.OrderByDescending(x => x.LstUpdateTime).FirstOrDefault(x => x.NodeID == node.NodeID);
-                                if(find==null)
+                                if (find == null)
                                 {
                                     networkNodes.Add(node);
                                 }
                                 else
                                 {
+                                    networkNodes.RemoveAll(x => x.NodeID == node.NodeID);
                                     if (find.LstUpdateTime < node.LstUpdateTime)
                                     {
-                                        find.LstUpdateTime = node.LstUpdateTime;
+                                        networkNodes.Add(node);
                                     }
                                 }
                             }

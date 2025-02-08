@@ -130,12 +130,6 @@ namespace Martiscoin.Networks.X1.Components
                 return consensus.PowLimit;
             }
 
-            if (chainTip.Height < ((X1Main)this.network).StakeHeight)
-            {
-                this.logger.LogDebug("Stake Height has not reached.");
-                return consensus.PowLimit;
-            }
-
             // Find the last two blocks that correspond to the mining algo
             // (i.e if this is a POS block we need to find the last two POS blocks).
             BigInteger targetLimit = proofOfStake

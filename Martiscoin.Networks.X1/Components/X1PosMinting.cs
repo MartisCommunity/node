@@ -402,6 +402,7 @@ namespace Martiscoin.Networks.X1.Components
                 if (chainTip.Height < ((X1Main)this.network).StakeHeight)
                 {
                     this.logger.LogDebug("Stake Height has not reached.");
+                    await Task.Delay(TimeSpan.FromMilliseconds(this.minerSleep), cancellationToken).ConfigureAwait(false);
                     continue;
                 }
 
