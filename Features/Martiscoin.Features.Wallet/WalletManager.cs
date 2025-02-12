@@ -254,7 +254,7 @@ namespace Martiscoin.Features.Wallet
                 if (!wallets.Any(w => w.Name == this.walletSettings.DefaultWalletName))
                 {
                     var mnemonic = new Mnemonic(Wordlist.English, WordCount.Twelve);
-                    this.CreateWallet(this.walletSettings.DefaultWalletPassword, this.walletSettings.DefaultWalletName, string.Empty, mnemonic);
+                    this.CreateWallet(this.walletSettings.DefaultWalletPassword, this.walletSettings.DefaultWalletName, string.Empty, mnemonic, purpose: 84);
                 }
 
                 // Make sure both unlock is specified, and that we actually have a default wallet name specified.

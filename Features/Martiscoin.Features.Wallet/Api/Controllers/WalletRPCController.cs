@@ -159,7 +159,7 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
 
         [ActionName("sendtoaddress")]
         [ActionDescription("Sends money to an address. Requires wallet to be unlocked using walletpassphrase.")]
-        public async Task<uint256> SendToAddressAsync(BitcoinAddress address,string password, decimal amount, string commentTx, string commentDest, decimal? fee = null)
+        public async Task<uint256> SendToAddressAsync(BitcoinAddress address,decimal amount, string commentTx, string commentDest, decimal? fee = null)
         {
             decimal transactionFee = fee ?? Money.Satoshis(this.FullNode.Network.MinTxFee).ToDecimal(MoneyUnit.BTC);
 
@@ -169,8 +169,7 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
                 MinConfirmations = 1,
                 Recipients = new[] { new Recipient { Amount = Money.Coins(amount), ScriptPubKey = address.ScriptPubKey } }.ToList(),
                 CacheSecret = false,
-                TransactionFee = Money.Coins(transactionFee),
-                WalletPassword= password,FeeType=FeeType.Medium
+                TransactionFee = Money.Coins(transactionFee)
             };
 
             try
@@ -791,7 +790,7 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
 
         [ActionName("sendmany")]
         [ActionDescription("Creates and broadcasts a transaction which sends outputs to multiple addresses.")]
-        public async Task<uint256> SendManyAsync(string fromAccount,string password, string addressesJson, int minConf = 1, string comment = null, string subtractFeeFromJson = null, bool isReplaceable = false, int? confTarget = null, string estimateMode = "UNSET")
+        public async Task<uint256> SendManyAsync(string fromAccount,string addressesJson, int minConf = 1, string comment = null, string subtractFeeFromJson = null, bool isReplaceable = false, int? confTarget = null, string estimateMode = "UNSET")
         {
             if (string.IsNullOrEmpty(addressesJson))
                 throw new RPCServerException(RPCErrorCode.RPC_INVALID_PARAMETER, "No valid output addresses specified.");
@@ -850,7 +849,7 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
                 MinConfirmations = minConf,
                 Shuffle = true, // We shuffle transaction outputs by default as it's better for anonymity.
                 Recipients = recipients,
-                CacheSecret = false,WalletPassword=password
+                CacheSecret = false
             };
 
             // Set fee type for transaction build context.
