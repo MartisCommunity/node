@@ -95,15 +95,15 @@ namespace Martiscoin.Features.BlockStore
         {
             LoggingConfiguration.RegisterFeatureNamespace<NodeSyncFeature>("nodesync");
 
-            fullNodeBuilder.ConfigureFeature(features =>
-            {
-                features
-                   .AddFeature<NodeSyncFeature>()
-                   .FeatureServices(services =>
-                   {
-                       services.AddSingleton<NodeSyncBehavior>();
-                   });
-            });
+            //fullNodeBuilder.ConfigureFeature(features =>
+            //{
+            //    features
+            //       .AddFeature<NodeSyncFeature>()
+            //       .FeatureServices(services =>
+            //       {
+            //           services.AddSingleton<NodeSyncBehavior>();
+            //       });
+            //});
 
             return fullNodeBuilder;
         }

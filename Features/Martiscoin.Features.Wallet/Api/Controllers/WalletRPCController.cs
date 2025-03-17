@@ -161,7 +161,7 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
         [ActionDescription("Sends money to an address. Requires wallet to be unlocked using walletpassphrase.")]
         public async Task<uint256> SendToAddressAsync(BitcoinAddress address,decimal amount, string commentTx, string commentDest, decimal? fee = null)
         {
-            decimal transactionFee = fee ?? Money.Satoshis(this.FullNode.Network.MinTxFee).ToDecimal(MoneyUnit.BTC);
+            decimal transactionFee = fee ?? 0.01M;//oney.Satoshis(this.FullNode.Network.MinTxFee).ToDecimal(MoneyUnit.BTC);
 
             TransactionBuildContext context = new TransactionBuildContext(this.FullNode.Network)
             {
@@ -171,6 +171,11 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
                 CacheSecret = false,
                 TransactionFee = Money.Coins(transactionFee)
             };
+
+            if (!string.IsNullOrEmpty(this.walletSettings.DefaultWalletPassword))
+            {
+                context.WalletPassword = this.walletSettings.DefaultWalletPassword;
+            }
 
             try
             {
@@ -849,11 +854,12 @@ namespace Martiscoin.Features.Wallet.Api.Controllers
                 MinConfirmations = minConf,
                 Shuffle = true, // We shuffle transaction outputs by default as it's better for anonymity.
                 Recipients = recipients,
-                CacheSecret = false
+                CacheSecret = false,
+                TransactionFee = Money.Coins(0.001M)
             };
 
             // Set fee type for transaction build context.
-            context.FeeType = FeeType.Medium;
+            context.FeeType = FeeType.High;
 
             if (estimateMode.Equals("ECONOMICAL", StringComparison.InvariantCultureIgnoreCase))
                 context.FeeType = FeeType.Low;

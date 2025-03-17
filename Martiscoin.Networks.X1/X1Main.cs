@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -201,35 +202,23 @@ namespace Martiscoin.Networks.X1
                 {
                     try
                     {
-                        if (!string.IsNullOrEmpty(NodeUUID))
+                        RegsiterNodes = RegsiterNodes == null ? new List<NodeInfo>() : RegsiterNodes;
+                        if (!string.IsNullOrEmpty(this.NodeUUID))
                         {
-                            var find = this.Parent.Services.ServiceProvider.GetRequiredService(typeof(IBroadcasterManager));
-                            if (find != null)
+                            if (RegsiterNodes.FindAll(x => x.NodeID == this.NodeUUID).Count <= 0)
                             {
-                                var broadcasterManager = find as BroadcasterManager;
-                                await broadcasterManager.PropagateNodeSyncToPeersAsync(this.NodeUUID, RegsiterNodes);
+                                RegsiterNodes.Add(new NodeInfo(this.NodeUUID));
                             }
-
-                            IEnumerable<NodeSyncBehavior> behaviors = ((FullNode)this.Parent).ConnectionManager.ConnectedPeers.Where(x => x.PeerVersion?.Relay ?? false)
-                                                              .Select(x => x.Behavior<NodeSyncBehavior>())
-                                                              .Where(x => x != null)
-                                                              .ToList();
-                            foreach (NodeSyncBehavior behavior in behaviors) {
-                                if (behavior == null) continue;
-                                foreach (NodeInfo info in behavior.NetWorkNodes)
-                                {
-                                    RegsiterNodes.RemoveAll(s => { return s.NodeID == info.NodeID; });
-                                    RegsiterNodes.Add(info);
-                                }
-                            }
-
+                            var jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(RegsiterNodes);
+                            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                            var result = await new HttpClient().PostAsync("https://api.martiscoin.org/api/query/nodelist", content);
+                            RegsiterNodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<NodeInfo>>(await result.Content.ReadAsStringAsync());
                             this.TotalNodes = RegsiterNodes.Count;
-                            this.OnlineNodes = RegsiterNodes.FindAll(s => { return s.LstUpdateTime >= DateTime.UtcNow.AddMinutes(-5); }).Count();
-
+                            this.OnlineNodes = RegsiterNodes.FindAll(s => { return s.LstUpdateTime >= DateTime.UtcNow.AddMinutes(-10); }).Count();
                         }
                     }
                     catch { }
-                    Thread.Sleep(1000 * 60);
+                    Thread.Sleep(1000 * 60 * 5);
                 }
             });
         }
