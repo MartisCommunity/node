@@ -99,14 +99,19 @@ namespace Martiscoin.Networks.X1.Consensus
        
         double GetTargetSpacingTotalSeconds(int height)
         {
+            // Fixed to 30 seconds on testnet
             if (this.currentNetwork.NetworkType != NetworkType.Mainnet)
-                return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 256 seconds
+                return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 30 seconds
 
             // X1 Main
             if (height < 165740)
-                return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 256 seconds
+                return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 30 seconds
 
-            return TimeSpan.FromMinutes(10).TotalSeconds; // 600 seconds
+            // Legacy Spacing (Martiscoin had a bug from block 165740 which caused blocks to last 600 seconds)
+            if (height < 170000)
+                return TimeSpan.FromMinutes(10).TotalSeconds; // 600 seconds
+
+            return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 30 seconds
         }
 
 
