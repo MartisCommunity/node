@@ -60,7 +60,7 @@ namespace Martiscoin.Networks.X1.Consensus
             if (mine == true)
                 MineGenesisBlock(genesisTime, genesisBits, genesisVersion, genesisReward, networkType);
 
-            string pszTimestamp = "https://martiscoin.org";
+            string pszTimestamp = "https://martiscoin.net";
 
             Transaction txNew = CreateTransaction();
             Debug.Assert(txNew.GetType() == typeof(X1Transaction));

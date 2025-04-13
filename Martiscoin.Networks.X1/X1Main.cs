@@ -182,7 +182,7 @@ namespace Martiscoin.Networks.X1
             try
             {
                 //get seed nodes
-                var result = await new HttpClient().GetStringAsync("https://api.martiscoin.org/api/stats/peers");
+                var result = await new HttpClient().GetStringAsync("https://api.martiscoin.net/api/stats/peers");
                 var peers = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(result);
                 foreach (var peer in peers)
                 {
@@ -211,7 +211,7 @@ namespace Martiscoin.Networks.X1
                             }
                             var jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(RegsiterNodes);
                             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                            var result = await new HttpClient().PostAsync("https://api.martiscoin.org/api/query/nodelist", content);
+                            var result = await new HttpClient().PostAsync("https://api.martiscoin.net/api/query/nodelist", content);
                             RegsiterNodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<NodeInfo>>(await result.Content.ReadAsStringAsync());
                             this.TotalNodes = RegsiterNodes.Count;
                             this.OnlineNodes = RegsiterNodes.FindAll(s => { return s.LstUpdateTime >= DateTime.UtcNow.AddMinutes(-10); }).Count();
