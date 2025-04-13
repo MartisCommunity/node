@@ -108,7 +108,7 @@ namespace Martiscoin.Networks.X1.Consensus
                 return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 30 seconds
 
             // Legacy Spacing (Martiscoin had a bug from block 165740 which caused blocks to last 600 seconds)
-            if (height < 170000)
+            if (height < 169676)
                 return TimeSpan.FromMinutes(10).TotalSeconds; // 600 seconds
 
             return this.currentNetwork.Consensus.TargetSpacing.TotalSeconds; // 30 seconds
